@@ -1,8 +1,11 @@
 #pragma once
 #include "../core/llaisys_core.hpp"
-
 #include <vector>
+#include <memory>
+#include <string>
+
 namespace llaisys {
+
 class Tensor;
 using tensor_t = std::shared_ptr<Tensor>;
 
@@ -12,12 +15,19 @@ struct TensorMeta {
     std::vector<ptrdiff_t> strides;
 };
 
-class Tensor {
+// 必须继承这个类才能使用 shared_from_this()
+class Tensor : public std::enable_shared_from_this<Tensor> {
 private:
     TensorMeta _meta;
     core::storage_t _storage;
     size_t _offset;
+    
+    // 构造函数保持私有
     Tensor(TensorMeta meta, core::storage_t storage, size_t offset = 0);
+
+    // 将辅助函数声明为私有静态成员，避免污染全局命名空间且解决作用域问题
+    static void index_to_coords(size_t linear_idx, const std::vector<size_t>& shape, std::vector<size_t>& coords);
+    static size_t coords_to_offset(const std::vector<size_t>& coords, const std::vector<ptrdiff_t>& strides);
 
 public:
     static tensor_t create(
@@ -25,7 +35,9 @@ public:
         llaisysDataType_t dtype,
         llaisysDeviceType_t device_type = LLAISYS_DEVICE_CPU,
         int device = 0);
+    
     ~Tensor() = default;
+
     // Info
     std::byte *data();
     const std::byte *data() const;
@@ -48,7 +60,7 @@ public:
     tensor_t slice(size_t dim, size_t start, size_t end) const;
     tensor_t view(const std::vector<size_t> &shape) const;
 
-    // Load data from host memory
+    // Load data
     void load(const void *src);
 
     // Challenging features

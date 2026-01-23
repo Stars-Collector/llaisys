@@ -1,11 +1,13 @@
 import gc
 from test_utils import *
+import os
 
+os.environ["HF_HOME"] = "D://All_Downloads//llaisys" 
 import argparse
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 from huggingface_hub import snapshot_download
-import os
+
 import time
 import llaisys
 import sys
