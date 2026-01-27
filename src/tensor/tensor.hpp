@@ -16,7 +16,7 @@ struct TensorMeta {
 };
 
 // 必须继承这个类才能使用 shared_from_this()
-class Tensor : public std::enable_shared_from_this<Tensor> {
+class Tensor {
 private:
     TensorMeta _meta;
     core::storage_t _storage;

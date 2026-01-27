@@ -258,7 +258,7 @@ tensor_t Tensor::view(const std::vector<size_t> &shape) const {
     std::vector<ptrdiff_t> new_strides(shape.size());
     size_t stride = 1;
     
-    // 3. 解决 C4267: 使用倒序遍历习惯写法
+    //使用倒序遍历习惯写法
     for (size_t i = shape.size(); i-- > 0; ) {
         new_strides[i] = stride;
         stride *= shape[i];
