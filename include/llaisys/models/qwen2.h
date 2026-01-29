@@ -6,7 +6,7 @@
 __C {
     struct LlaisysQwen2Meta {
         llaisysDataType_t dtype;
-        size_t nlayer, hs, nh, nkvh, dh, di, maxseq, voc;
+        size_t nlayer, hs, nh, nkvh, dh, di, maxseq, voc, intermediate_size;
         float epsilon, theta;
         int64_t end_token;
     };
@@ -38,5 +38,7 @@ __C {
     __export struct LlaisysQwen2Weights *llaisysQwen2ModelWeights(struct LlaisysQwen2Model * model);
 
     __export int64_t llaisysQwen2ModelInfer(struct LlaisysQwen2Model * model, int64_t * token_ids, size_t ntoken);
+
+    __export void llaisysQwen2ModelResetCache(struct LlaisysQwen2Model * model);
 }
 #endif // LLAISYS_MODELS_QWEN2_H
